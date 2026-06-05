@@ -5,3 +5,4 @@
 <script>document.getElementById('applyForm').addEventListener('submit',function(e){e.preventDefault();let apps=JSON.parse(localStorage.getItem('applications')||'[]');apps.push({name:document.getElementById('name').value,phone:document.getElementById('phone').value,specialty:document.getElementById('specialty').value,experience:document.getElementById('experience').value});localStorage.setItem('applications',JSON.stringify(apps));document.getElementById('success').style.display='block';document.getElementById('applyForm').reset();setTimeout(()=>{document.getElementById('success').style.display='none';},3000);});</script></body></html>
 EOF
 
+nano about.html
