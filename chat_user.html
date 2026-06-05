@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مساعد نجدة الذكي</title>
+<title>محادثة الخدمة</title>
 
 <style>
 body{
@@ -15,48 +15,26 @@ body{
     height:100vh;
 }
 
-/* ===== SIDEBAR (optional style) ===== */
-.sidebar{
-    width:250px;
-    background:#0f172a;
+/* ===== HEADER ===== */
+.topbar{
+    background:#111827;
     padding:15px;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-}
-
-.sidebar h2{
-    font-size:18px;
-    margin-bottom:10px;
-}
-
-.newchat{
-    padding:10px;
-    background:#1e293b;
-    border-radius:10px;
     text-align:center;
-    cursor:pointer;
+    font-weight:bold;
 }
 
-/* ===== CHAT AREA ===== */
+/* ===== CHAT ===== */
 .chat{
     flex:1;
     display:flex;
     flex-direction:column;
 }
 
-.header{
-    padding:15px;
-    background:#111827;
-    text-align:center;
-    font-weight:bold;
-}
-
 /* messages */
 .messages{
     flex:1;
-    padding:20px;
     overflow-y:auto;
+    padding:15px;
     display:flex;
     flex-direction:column;
     gap:10px;
@@ -69,8 +47,10 @@ body{
     border-radius:15px;
     line-height:1.6;
     animation:pop 0.2s ease;
+    word-wrap:break-word;
 }
 
+/* USER */
 .user{
     align-self:flex-start;
     background:#ffd700;
@@ -78,13 +58,15 @@ body{
     border-bottom-left-radius:0;
 }
 
-.bot{
+/* TECH */
+.tech{
     align-self:flex-end;
     background:#1e293b;
     border-bottom-right-radius:0;
+    border:1px solid rgba(255,255,255,0.1);
 }
 
-/* input */
+/* INPUT */
 .inputBox{
     display:flex;
     padding:10px;
@@ -95,11 +77,11 @@ body{
 input{
     flex:1;
     padding:12px;
-    border-radius:10px;
     border:none;
-    outline:none;
+    border-radius:10px;
     background:#111827;
     color:white;
+    outline:none;
 }
 
 button{
@@ -107,8 +89,8 @@ button{
     border:none;
     border-radius:10px;
     background:#ffd700;
-    cursor:pointer;
     font-weight:bold;
+    cursor:pointer;
 }
 
 /* animation */
@@ -116,38 +98,40 @@ button{
     from{transform:scale(0.95); opacity:0;}
     to{transform:scale(1); opacity:1;}
 }
+
+/* small badge */
+.badge{
+    font-size:12px;
+    opacity:0.7;
+}
 </style>
 </head>
 
 <body>
 
-<div class="sidebar">
-    <h2>🜸 نجدة AI</h2>
-    <div class="newchat" onclick="clearChat()">+ محادثة جديدة</div>
-</div>
-
 <div class="chat">
 
-<div class="header">
-🤖 مساعد نجدة الذكي
+<div class="topbar">
+👨‍🔧 محادثة مع الفني - <span class="badge">متصل الآن</span>
 </div>
 
 <div class="messages" id="messages">
 
-<div class="msg bot">
-مرحباً 👋 أنا مساعد نجدة، كيف أقدر أساعدك؟
+<div class="msg tech">
+👋 مرحباً، أنا الفني الخاص بك. كيف يمكنني مساعدتك؟
 </div>
 
 </div>
 
 <div class="inputBox">
-<input id="input" placeholder="اكتب رسالتك..." />
+<input id="input" placeholder="اكتب رسالتك للفني..." />
 <button onclick="send()">إرسال</button>
 </div>
 
 </div>
 
 <script>
+
 function send(){
     let input = document.getElementById("input");
     let text = input.value.trim();
@@ -157,8 +141,8 @@ function send(){
     input.value = "";
 
     setTimeout(()=>{
-        botReply(text);
-    },500);
+        techReply(text);
+    },700);
 }
 
 function addMessage(text, type){
@@ -170,30 +154,29 @@ function addMessage(text, type){
     document.getElementById("messages").scrollTop = 999999;
 }
 
-function botReply(text){
+/* ===== TECH REPLY (مؤقت) ===== */
+function techReply(text){
     let reply = "";
 
-    if(text.includes("كهرباء")){
-        reply = "⚡ يمكنك طلب فني كهرباء من صفحة الخدمات.";
+    if(text.includes("مشكلة") || text.includes("عطل")){
+        reply = "تمام 👍 أرسل لي التفاصيل أو الموقع وسأحل المشكلة.";
+    }
+    else if(text.includes("كهرباء")){
+        reply = "⚡ فهمت، أنا فني كهرباء وسأساعدك فورًا.";
     }
     else if(text.includes("سباكة")){
-        reply = "🚰 يوجد فنيين سباكة جاهزين قريب منك.";
+        reply = "🚰 تم، أحتاج فقط موقعك للتوجه.";
     }
     else if(text.includes("سيارة")){
-        reply = "🚗 خدمة السيارات متوفرة (بطارية - سحب - إطار).";
+        reply = "🚗 حاضر، هل المشكلة بطارية أم إطار؟";
     }
     else{
-        reply = "أنا هنا لمساعدتك 👍 اختر الخدمة من الصفحة الرئيسية أو اكتب المشكلة بالتفصيل.";
+        reply = "تمام، وضح لي أكثر وسأساعدك 👍";
     }
 
-    addMessage(reply, "bot");
+    addMessage(reply, "tech");
 }
 
-function clearChat(){
-    document.getElementById("messages").innerHTML = `
-        <div class="msg bot">محادثة جديدة 👋 كيف أساعدك؟</div>
-    `;
-}
 </script>
 
 </body>
