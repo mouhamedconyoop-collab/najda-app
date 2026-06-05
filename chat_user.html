@@ -2,8 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>محادثة الخدمة</title>
+<title>محادثة المستخدم</title>
 
 <style>
 body{
@@ -11,62 +10,43 @@ body{
     font-family:system-ui;
     background:#0b1220;
     color:white;
-    display:flex;
     height:100vh;
-}
-
-/* ===== HEADER ===== */
-.topbar{
-    background:#111827;
-    padding:15px;
-    text-align:center;
-    font-weight:bold;
-}
-
-/* ===== CHAT ===== */
-.chat{
-    flex:1;
     display:flex;
     flex-direction:column;
 }
 
-/* messages */
+header{
+    padding:15px;
+    background:#111827;
+    text-align:center;
+}
+
 .messages{
     flex:1;
-    overflow-y:auto;
     padding:15px;
+    overflow:auto;
     display:flex;
     flex-direction:column;
     gap:10px;
 }
 
-/* bubbles */
 .msg{
+    padding:10px 15px;
+    border-radius:12px;
     max-width:70%;
-    padding:12px 15px;
-    border-radius:15px;
-    line-height:1.6;
-    animation:pop 0.2s ease;
-    word-wrap:break-word;
 }
 
-/* USER */
 .user{
-    align-self:flex-start;
     background:#ffd700;
     color:black;
-    border-bottom-left-radius:0;
+    align-self:flex-start;
 }
 
-/* TECH */
 .tech{
-    align-self:flex-end;
     background:#1e293b;
-    border-bottom-right-radius:0;
-    border:1px solid rgba(255,255,255,0.1);
+    align-self:flex-end;
 }
 
-/* INPUT */
 .inputBox{
     display:flex;
     padding:10px;
@@ -79,103 +59,68 @@ input{
     padding:12px;
     border:none;
     border-radius:10px;
-    background:#111827;
-    color:white;
     outline:none;
 }
 
 button{
-    padding:12px 18px;
+    padding:12px 16px;
+    background:#ffd700;
     border:none;
     border-radius:10px;
-    background:#ffd700;
     font-weight:bold;
-    cursor:pointer;
-}
-
-/* animation */
-@keyframes pop{
-    from{transform:scale(0.95); opacity:0;}
-    to{transform:scale(1); opacity:1;}
-}
-
-/* small badge */
-.badge{
-    font-size:12px;
-    opacity:0.7;
 }
 </style>
 </head>
 
 <body>
 
-<div class="chat">
+<header>
+👨‍🔧 محادثة مع الفني
+</header>
 
-<div class="topbar">
-👨‍🔧 محادثة مع الفني - <span class="badge">متصل الآن</span>
-</div>
-
-<div class="messages" id="messages">
-
-<div class="msg tech">
-👋 مرحباً، أنا الفني الخاص بك. كيف يمكنني مساعدتك؟
-</div>
-
-</div>
+<div class="messages" id="messages"></div>
 
 <div class="inputBox">
-<input id="input" placeholder="اكتب رسالتك للفني..." />
+<input id="input" placeholder="اكتب رسالتك..." />
 <button onclick="send()">إرسال</button>
-</div>
-
 </div>
 
 <script>
 
+function load(){
+    let msgs = JSON.parse(localStorage.getItem("msgs") || "[]");
+    let box = document.getElementById("messages");
+    box.innerHTML = "";
+
+    msgs.forEach(m=>{
+        let div = document.createElement("div");
+        div.className = "msg " + m.type;
+        div.innerText = m.text;
+        box.appendChild(div);
+    });
+
+    box.scrollTop = 999999;
+}
+
 function send(){
     let input = document.getElementById("input");
-    let text = input.value.trim();
-    if(text === "") return;
+    if(input.value.trim() === "") return;
 
-    addMessage(text, "user");
+    let msgs = JSON.parse(localStorage.getItem("msgs") || "[]");
+
+    msgs.push({
+        type:"user",
+        text:input.value
+    });
+
+    localStorage.setItem("msgs", JSON.stringify(msgs));
+
     input.value = "";
-
-    setTimeout(()=>{
-        techReply(text);
-    },700);
+    load();
 }
 
-function addMessage(text, type){
-    let msg = document.createElement("div");
-    msg.className = "msg " + type;
-    msg.innerText = text;
-
-    document.getElementById("messages").appendChild(msg);
-    document.getElementById("messages").scrollTop = 999999;
-}
-
-/* ===== TECH REPLY (مؤقت) ===== */
-function techReply(text){
-    let reply = "";
-
-    if(text.includes("مشكلة") || text.includes("عطل")){
-        reply = "تمام 👍 أرسل لي التفاصيل أو الموقع وسأحل المشكلة.";
-    }
-    else if(text.includes("كهرباء")){
-        reply = "⚡ فهمت، أنا فني كهرباء وسأساعدك فورًا.";
-    }
-    else if(text.includes("سباكة")){
-        reply = "🚰 تم، أحتاج فقط موقعك للتوجه.";
-    }
-    else if(text.includes("سيارة")){
-        reply = "🚗 حاضر، هل المشكلة بطارية أم إطار؟";
-    }
-    else{
-        reply = "تمام، وضح لي أكثر وسأساعدك 👍";
-    }
-
-    addMessage(reply, "tech");
-}
+setInterval(load,1000);
+load();
 
 </script>
 
