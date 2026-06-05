@@ -2,40 +2,145 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>انضم كفني - نجدة</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
-        body{background:#f5f5f5;font-family:'Segoe UI',sans-serif;padding:20px;min-height:100vh;display:flex;justify-content:center;align-items:center;}
-        .box{background:#fff;border-radius:30px;padding:35px;max-width:500px;width:100%;}
-        h2{text-align:center;color:#1a1a2e;margin-bottom:25px;}
-        label{display:block;margin:15px 0 5px;color:#1a1a2e;font-weight:bold;}
-        input,select,textarea{width:100%;padding:12px;background:#f5f5f5;border:1px solid #ddd;border-radius:15px;}
-        button{background:#ffd700;color:#1a1a2e;padding:14px;border:none;border-radius:30px;width:100%;font-weight:bold;margin-top:20px;cursor:pointer;}
-        .back{display:block;text-align:center;margin-top:15px;color:#888;text-decoration:none;}
-        .success{background:#4caf50;color:#fff;padding:10px;border-radius:15px;margin-bottom:15px;display:none;}
+        body{
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 30px 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .box{
+            background: #fff;
+            border-radius: 35px;
+            padding: 40px 35px;
+            max-width: 550px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+        h2{
+            text-align: center;
+            color: #1a1a2e;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .sub{
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        label{
+            display: block;
+            margin: 18px 0 8px;
+            color: #1a1a2e;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        input, select, textarea{
+            width: 100%;
+            padding: 14px 16px;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 15px;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        input:focus, select:focus, textarea:focus{
+            outline: none;
+            border-color: #ffd700;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(255,215,0,0.1);
+        }
+        button{
+            background: linear-gradient(95deg, #ffd700, #ffaa00);
+            color: #1a1a2e;
+            padding: 16px;
+            border: none;
+            border-radius: 40px;
+            width: 100%;
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover{
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(255,215,0,0.3);
+        }
+        .back{
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back:hover{
+            color: #ffd700;
+        }
+        .success{
+            background: #4caf50;
+            color: #fff;
+            padding: 14px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+            font-weight: bold;
+        }
+        select{
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+        }
+        textarea{
+            resize: vertical;
+            min-height: 80px;
+        }
+        @media (max-width: 550px){
+            .box{padding: 30px 25px;}
+            h2{font-size: 26px;}
+        }
     </style>
 </head>
 <body>
 <div class="box">
-    <h2>👨‍🔧 انضم كفني</h2>
-    <div id="success" class="success">✅ تم إرسال طلبك!</div>
+    <h2>🜸 انضم كفني 🜸</h2>
+    <div class="sub">سجل بياناتك وسنقوم بالتواصل معك</div>
+    <div id="success" class="success">✅ تم إرسال طلبك بنجاح!</div>
     <form id="applyForm">
-        <label>الاسم الكامل</label>
-        <input type="text" id="name" required>
-        <label>رقم الجوال</label>
-        <input type="tel" id="phone" required>
-        <label>التخصص</label>
+        <label>👤 الاسم الكامل</label>
+        <input type="text" id="name" required placeholder="مثال: أحمد محمد">
+
+        <label>📱 رقم الجوال</label>
+        <input type="tel" id="phone" required placeholder="05xxxxxxxx">
+
+        <label>🔧 التخصص</label>
         <select id="specialty" required>
-            <option value="كهرباء">كهرباء</option>
-            <option value="سباكة">سباكة</option>
-            <option value="سيارات">سيارات</option>
+            <option value="">-- اختر التخصص --</option>
+            <option value="كهرباء">⚡ كهرباء</option>
+            <option value="سباكة">🚰 سباكة</option>
+            <option value="سيارات">🚗 سيارات</option>
         </select>
-        <label>الخبرات</label>
-        <textarea id="experience" rows="2" placeholder="مثال: خبرة 3 سنوات في كهرباء المنازل"></textarea>
-        <button type="submit">إرسال الطلب</button>
+
+        <label>📝 الخبرات السابقة</label>
+        <textarea id="experience" rows="3" placeholder="مثال: خبرة 5 سنوات في كهرباء المنازل والمصانع"></textarea>
+
+        <button type="submit">🚀 إرسال الطلب</button>
     </form>
-    <a href="index.html" class="back">← العودة</a>
+    <a href="index.html" class="back">← العودة للرئيسية</a>
 </div>
 <script>
     document.getElementById('applyForm').addEventListener('submit', function(e) {
