@@ -1,75 +1,25 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>طلب خدمة - نجدة</title>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{background:#f5f5f5;font-family:'Segoe UI',sans-serif;padding:20px;min-height:100vh;display:flex;justify-content:center;align-items:center;}
-        .box{background:#fff;border-radius:30px;padding:35px;max-width:500px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.1);}
-        h2{text-align:center;color:#1a1a2e;margin-bottom:25px;}
-        label{display:block;margin:15px 0 5px;color:#1a1a2e;font-weight:bold;}
-        input,textarea{width:100%;padding:12px;background:#f5f5f5;border:1px solid #ddd;border-radius:15px;}
-        button{background:#ffd700;color:#1a1a2e;padding:14px;border:none;border-radius:30px;width:100%;font-weight:bold;margin-top:20px;cursor:pointer;}
-        .back{display:block;text-align:center;margin-top:15px;color:#888;text-decoration:none;}
-        .info{background:#f8f8f8;padding:20px;border-radius:20px;margin-top:20px;text-align:right;display:none;}
-        .status{font-size:20px;margin:15px 0;}
-        .جديد{color:#ff9800;}
-    </style>
-</head>
-<body>
-<div class="box">
-    <h2>📝 طلب خدمة</h2>
-    <div id="success" style="background:#4caf50;color:#fff;padding:10px;border-radius:15px;margin-bottom:15px;display:none;">✅ تم إرسال طلبك!</div>
-    <form id="orderForm">
-        <label>الاسم الكامل</label>
-        <input type="text" id="name" required>
-        <label>رقم الجوال</label>
-        <input type="tel" id="phone" required>
-        <label>العنوان</label>
-        <textarea id="address" rows="3" required></textarea>
-        <button type="submit">إرسال الطلب</button>
-    </form>
-    <div id="orderDisplay" style="display:none;">
-        <div class="info" id="orderInfo"></div>
-        <div class="status" id="orderStatus"></div>
-        <button class="back" onclick="location.href='index.html'">← الرئيسية</button>
-    </div>
-</div>
 <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const service = urlParams.get('service') || 'خدمة';
-    
-    document.getElementById('orderForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const order = {
-            id: Date.now(),
-            name: document.getElementById('name').value,
-            phone: document.getElementById('phone').value,
-            address: document.getElementById('address').value,
-            service: service,
-            status: 'جديد',
-            technicianId: null
-        };
-        let orders = JSON.parse(localStorage.getItem('orders') || '[]');
-        orders.push(order);
-        localStorage.setItem('orders', JSON.stringify(orders));
-        localStorage.setItem('lastOrderId', order.id);
-        
-        document.getElementById('success').style.display = 'block';
-        document.getElementById('orderForm').style.display = 'none';
-        document.getElementById('orderDisplay').style.display = 'block';
-        
-        document.getElementById('orderInfo').innerHTML = `
-            <p><strong>رقم الطلب:</strong> #${order.id}</p>
-            <p><strong>الخدمة:</strong> ${order.service}</p>
-            <p><strong>الاسم:</strong> ${order.name}</p>
-            <p><strong>الجوال:</strong> ${order.phone}</p>
-            <p><strong>العنوان:</strong> ${order.address}</p>
-        `;
-        document.getElementById('orderStatus').innerHTML = `<span class="${order.status}">${order.status}</span>`;
-    });
+function saveOrder(order){
+    let orders=JSON.parse(localStorage.getItem("orders")||"[]");
+    orders.push(order);
+    localStorage.setItem("orders",JSON.stringify(orders));
+}
+
+document.getElementById("orderForm").addEventListener("submit",e=>{
+e.preventDefault();
+
+let order={
+    id:Date.now(),
+    name:document.getElementById("name").value,
+    phone:document.getElementById("phone").value,
+    address:document.getElementById("address").value,
+    service:new URLSearchParams(location.search).get("service"),
+    status:"جديد"
+};
+
+saveOrder(order);
+
+localStorage.setItem("currentChatOrder",order.id);
+location.href="chat.html?orderId="+order.id;
+});
 </script>
-</body>
-</html>
