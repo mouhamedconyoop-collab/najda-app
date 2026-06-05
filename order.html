@@ -6,20 +6,23 @@
     <title>طلب خدمة - نجدة</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
-        body{background:#f5f5f5;font-family:'Segoe UI',sans-serif;padding:20px;min-height:100vh;display:flex;justify-content:center;align-items:center;}
-        .box{background:#fff;border-radius:30px;padding:35px;max-width:500px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.1);}
-        h2{text-align:center;color:#1a1a2e;margin-bottom:25px;}
-        label{display:block;margin:15px 0 5px;color:#1a1a2e;font-weight:bold;}
-        input,textarea{width:100%;padding:12px;background:#f5f5f5;border:1px solid #ddd;border-radius:15px;}
-        button{background:#ffd700;color:#1a1a2e;padding:14px;border:none;border-radius:30px;width:100%;font-weight:bold;margin-top:20px;cursor:pointer;}
+        body{background:#0a0a0a;font-family:'Segoe UI',sans-serif;padding:20px;min-height:100vh;display:flex;justify-content:center;align-items:center;}
+        .box{background:#111;border-radius:35px;padding:45px;max-width:550px;width:100%;border:1px solid #333;}
+        h2{text-align:center;color:#ffd700;margin-bottom:25px;font-size:32px;}
+        label{display:block;margin:18px 0 8px;color:#ffd700;font-weight:bold;}
+        input,textarea{width:100%;padding:14px;background:#1a1a1a;border:1px solid #333;border-radius:15px;color:#fff;font-size:15px;}
+        button{background:#ffd700;color:#000;padding:14px;border:none;border-radius:30px;width:100%;font-weight:bold;margin-top:25px;cursor:pointer;font-size:16px;}
         .back{display:block;text-align:center;margin-top:15px;color:#888;text-decoration:none;}
-        .success{background:#4caf50;color:#fff;padding:10px;border-radius:15px;margin-bottom:15px;display:none;}
+        .summary{background:#1a1a1a;border-radius:20px;padding:20px;margin:20px 0;display:none;border:1px solid #ffd700;}
+        .summary p{margin:8px 0;color:#ddd;}
+        .summary strong{color:#ffd700;}
+        .btn-chat{background:#2196f3;color:#fff;margin-top:10px;}
     </style>
 </head>
 <body>
 <div class="box">
     <h2>📝 طلب خدمة</h2>
-    <div id="success" class="success">✅ تم إرسال طلبك!</div>
+    <div id="success" style="background:#00e676;color:#000;padding:12px;border-radius:15px;margin-bottom:15px;display:none;text-align:center;font-weight:bold;">✅ تم إرسال طلبك!</div>
     <form id="orderForm">
         <label>الاسم الكامل</label>
         <input type="text" id="name" required>
@@ -27,28 +30,64 @@
         <input type="tel" id="phone" required>
         <label>العنوان</label>
         <textarea id="address" rows="3" required></textarea>
-        <button type="submit">إرسال الطلب</button>
+        <button type="submit" id="submitBtn">📤 إرسال الطلب</button>
     </form>
+    <div id="summary" class="summary"></div>
+    <div id="chatDiv" style="display:none;">
+        <button id="chatBtn" class="btn-chat" style="background:#2196f3;color:#fff;padding:14px;border:none;border-radius:30px;width:100%;font-weight:bold;cursor:pointer;">💬 دردشة مع الفني</button>
+    </div>
     <a href="index.html" class="back">← العودة</a>
 </div>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const service = urlParams.get('service') || 'خدمة';
+    let lastOrderId = null;
+    
     document.getElementById('orderForm').addEventListener('submit', function(e) {
         e.preventDefault();
+        
         const order = {
             id: Date.now(),
             name: document.getElementById('name').value,
             phone: document.getElementById('phone').value,
             address: document.getElementById('address').value,
             service: service,
-            status: 'جديد'
+            status: 'جديد',
+            technicianId: null
         };
+        
+        // عرض الملخص
+        const summaryDiv = document.getElementById('summary');
+        summaryDiv.innerHTML = `
+            <h3 style="color:#ffd700;margin-bottom:15px;">📋 تفاصيل طلبك</h3>
+            <p><strong>رقم الطلب:</strong> #${order.id}</p>
+            <p><strong>الخدمة:</strong> ${order.service}</p>
+            <p><strong>الاسم:</strong> ${order.name}</p>
+            <p><strong>الجوال:</strong> ${order.phone}</p>
+            <p><strong>العنوان:</strong> ${order.address}</p>
+            <p><strong>الحالة:</strong> <span style="color:#ff9800;">جديد</span></p>
+            <hr style="margin:15px 0;border-color:#333;">
+            <p style="font-size:12px;color:#888;">سيتم إشعارك عند قبول الطلب</p>
+        `;
+        summaryDiv.style.display = 'block';
+        
+        // حفظ الطلب
         let orders = JSON.parse(localStorage.getItem('orders') || '[]');
         orders.push(order);
         localStorage.setItem('orders', JSON.stringify(orders));
+        lastOrderId = order.id;
+        
+        // إخفاء النموذج وإظهار الخيارات
+        document.getElementById('orderForm').style.display = 'none';
         document.getElementById('success').style.display = 'block';
-        document.getElementById('orderForm').reset();
+        document.getElementById('chatDiv').style.display = 'block';
+        
+        // زر الدردشة
+        document.getElementById('chatBtn').onclick = function() {
+            localStorage.setItem('currentChatOrder', lastOrderId);
+            window.open('chat.html', '_blank', 'width=400,height=600');
+        };
+        
         setTimeout(() => { document.getElementById('success').style.display = 'none'; }, 3000);
     });
 </script>
