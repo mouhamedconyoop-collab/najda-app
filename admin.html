@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإدارة - نجدة</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:#f0f2f5;font-family:'Segoe UI',sans-serif;padding:20px;}
+        .container{max-width:1000px;margin:auto;}
+        .header{background:#1a1a2e;color:#fff;padding:15px;border-radius:20px;margin-bottom:25px;display:flex;justify-content:space-between;align-items:center;}
+        .logo{font-size:24px;font-weight:bold;}
+        .logo span{color:#ffd700;}
+        .logout{background:#f44336;color:#fff;padding:8px 20px;border-radius:30px;text-decoration:none;}
+        .tabs{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+        .tab{background:#ddd;padding:10px 20px;border-radius:30px;cursor:pointer;}
+        .tab.active{background:#ffd700;}
+        .tab-content{display:none;}
+        .tab-content.active{display:block;}
+        .card{background:#fff;border-radius:15px;padding:15px;margin-bottom:15px;}
+        .status{padding:4px 12px;border-radius:20px;font-size:12px;color:#fff;display:inline-block;}
+        .status-new{background:#ff9800;}
+        .status-progress{background:#2196f3;}
+        .status-done{background:#4caf50;}
+        .btn{background:#ffd700;padding:5px 12px;border-radius:20px;border:none;cursor:pointer;margin:2px;}
+        .btn-danger{background:#f44336;color:#fff;}
+        select{padding:5px;border-radius:15px;}
+        .chat-messages{height:300px;overflow-y:auto;background:#fafafa;padding:15px;border-radius:15px;margin-bottom:10px;}
+        .message{margin-bottom:10px;}
+        .message.sent{text-align:right;}
+        .message.received{text-align:left;}
+        .bubble{display:inline-block;padding:8px 12px;border-radius:18px;max-width:70%;}
+        .sent .bubble{background:#dcf8c5;}
+        .received .bubble{background:#fff;border:1px solid #ddd;}
+        .chat-input{display:flex;gap:10px;}
+        .chat-input input{flex:1;padding:10px;border-radius:25px;border:1px solid #ddd;}
+        .chat-input button{background:#ffd700;padding:10px 20px;border-radius:25px;border:none;cursor:pointer;}
+        .empty{text-align:center;padding:30px;color:#888;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="logo">🜸 <span>نجدة</span> 🜸</div>
+        <a href="admin_login.html" class="logout" onclick="localStorage.removeItem('admin_logged')">خروج</a>
+    </div>
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('orders')">📋 الطلبات</div>
+        <div class="tab" onclick="showTab('technicians')">👥 الفنيين</div>
+        <div class="tab" onclick="showTab('applications')">👨‍🔧 طلبات الانضمام</div>
+        <div class="tab" onclick="showTab('chat')">💬 دردشة النجدة</div>
+    </div>
+    <div id="ordersTab" class="tab-content active"><div id="ordersList"></div></div>
+    <div id="techniciansTab" class="tab-content"><div id="techList"></div></div>
+    <div id="applicationsTab" class="tab-content"><div id="applyList"></div></div>
+    <div id="chatTab" class="tab-content">
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input"><input type="text" id="chatInput" placeholder="اكتب رسالة..."><button onclick="sendMessage()">إرسال</button></div>
+    </div>
+</div>
+<script>
+    if(localStorage.getItem('admin_logged') !== 'true') window.location.href = 'admin_login.html';
+    function showTab(tab){
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        event.target.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+        document.getElementById(tab+'Tab').classList.add('active');
+        if(tab==='chat') loadMessages();
+    }
+    function loadOrders(){
+        let orders=JSON.parse(localStorage.getItem('orders')||'[]');
+        let techs=JSON.parse(localStorage.getItem('technicians')||'[]');
+        let container=document.getElementById('ordersList');
+        if(orders.length===0){container.innerHTML='<div class="empty">📭 لا توجد طلبات</div>';return;}
+        container.innerHTML='';
+        orders.reverse().forEach(order=>{
+            let statusClass=order.status==='جديد'?'status-new':(order.status==='قيد التنفيذ'?'status-progress':'status-done');
+            container.innerHTML+=`<div class="card"><div><strong>#${order.id}</strong> | ${order.service} | <span class="status ${statusClass}">${order.status}</span></div><div>👤 ${order.name} | 📱 ${order.phone}</div><div>📍 ${order.address}</div><div style="margin-top:10px;">${order.technicianId?`<span>فني: ${techs.find(t=>t.id===order.technicianId)?.name||order.technicianId}</span>`:`<select id="techSelect_${order.id}"><option value="">اختر فني...</option>${techs.map(t=>`<option value="${t.id}">${t.name} (${t.specialty})</option>`).join('')}</select><button class="btn" onclick="assignTech(${order.id})">إرسال</button>`}<button class="btn btn-danger" onclick="deleteOrder(${order.id})">حذف</button></div></div>`;
+        });
+    }
+    function assignTech(orderId){
+        let techId=parseInt(document.getElementById(`techSelect_${orderId}`).value);
+        if(!techId) return;
+        let orders=JSON.parse(localStorage.getItem('orders')||'[]');
+        orders=orders.map(o=>o.id===orderId?{...o,technicianId:techId,status:'قيد التنفيذ'}:o);
+        localStorage.setItem('orders',JSON.stringify(orders));
+        loadOrders();
+    }
+    function deleteOrder(orderId){
+        let orders=JSON.parse(localStorage.getItem('orders')||'[]');
+        orders=orders.filter(o=>o.id!==orderId);
+        localStorage.setItem('orders',JSON.stringify(orders));
+        loadOrders();
+    }
+    function loadTechnicians(){
+        let techs=JSON.parse(localStorage.getItem('technicians')||'[]');
+        let container=document.getElementById('techList');
+        if(techs.length===0){container.innerHTML='<div class="empty">👤 لا يوجد فنيين</div>';return;}
+        container.innerHTML='';
+        techs.forEach((tech,idx)=>{container.innerHTML+=`<div class="card"><div><strong>${tech.name}</strong> | ${tech.specialty}</div><div>📱 ${tech.phone}</div><button class="btn btn-danger" onclick="deleteTech(${idx})">حذف</button></div>`;});
+    }
+    function deleteTech(idx){
+        let techs=JSON.parse(localStorage.getItem('technicians')||'[]');
+        techs.splice(idx,1);
+        localStorage.setItem('technicians',JSON.stringify(techs));
+        loadTechnicians();
+        loadOrders();
+    }
+    function loadApplications(){
+        let apps=JSON.parse(localStorage.getItem('applications')||'[]');
+        let container=document.getElementById('applyList');
+        if(apps.length===0){container.innerHTML='<div class="empty">📭 لا توجد طلبات</div>';return;}
+        container.innerHTML='';
+        apps.forEach((app,idx)=>{container.innerHTML+=`<div class="card"><div><strong>${app.name}</strong> | ${app.specialty}</div><div>📱 ${app.phone}</div><div>${app.experience||''}</div><div><button class="btn" style="background:#4caf50;color:#fff;" onclick="acceptTech(${idx})">قبول</button> <button class="btn btn-danger" onclick="rejectTech(${idx})">رفض</button></div></div>`;});
+    }
+    function acceptTech(idx){
+        let apps=JSON.parse(localStorage.getItem('applications')||'[]');
+        let techs=JSON.parse(localStorage.getItem('technicians')||'[]');
+        let newId=Date.now();
+        techs.push({id:newId,name:apps[idx].name,phone:apps[idx].phone,specialty:apps[idx].specialty,password:apps[idx].phone});
+        apps.splice(idx,1);
+        localStorage.setItem('technicians',JSON.stringify(techs));
+        localStorage.setItem('applications',JSON.stringify(apps));
+        loadTechnicians();
+        loadApplications();
+    }
+    function rejectTech(idx){
+        let apps=JSON.parse(localStorage.getItem('applications')||'[]');
+        apps.splice(idx,1);
+        localStorage.setItem('applications',JSON.stringify(apps));
+        loadApplications();
+    }
+    function loadMessages(){
+        let msgs=JSON.parse(localStorage.getItem('group_chat')||'[]');
+        let container=document.getElementById('chatMessages');
+        if(msgs.length===0){container.innerHTML='<div class="empty">✨ ابدأ المحادثة ✨</div>';return;}
+        container.innerHTML='';
+        msgs.forEach(msg=>{
+            let div=document.createElement('div');
+            div.className=`message ${msg.sender==='إدارة'?'sent':'received'}`;
+            div.innerHTML=`<div class="bubble"><strong>${msg.sender}</strong><br>${msg.message}<br><small>${new Date(msg.time).toLocaleTimeString()}</small></div>`;
+            container.appendChild(div);
+        });
+        container.scrollTop=container.scrollHeight;
+    }
+    function sendMessage(){
+        let input=document.getElementById('chatInput');
+        let msg=input.value.trim();
+        if(!msg) return;
+        let msgs=JSON.parse(localStorage.getItem('group_chat')||'[]');
+        msgs.push({sender:'إدارة',message:msg,time:Date.now()});
+        localStorage.setItem('group_chat',JSON.stringify(msgs));
+        input.value='';
+        loadMessages();
+    }
+    document.getElementById('chatInput')?.addEventListener('keypress',e=>{if(e.key==='Enter')sendMessage();});
+    loadOrders();loadTechnicians();loadApplications();
+    setInterval(()=>{loadOrders();loadTechnicians();loadApplications();loadMessages();},3000);
+</script>
+</body>
+</html>
