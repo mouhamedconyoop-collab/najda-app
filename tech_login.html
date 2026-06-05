@@ -1,1 +1,35 @@
-localStorage.setItem("role","client"); // أو tech أو admin
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دخول الإدارة - نجدة</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:#1a1a2e;font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex;justify-content:center;align-items:center;}
+        .box{background:#fff;border-radius:30px;padding:40px;max-width:380px;width:100%;text-align:center;}
+        h2{color:#1a1a2e;margin-bottom:20px;}
+        input{width:100%;padding:14px;margin:10px 0;background:#f5f5f5;border:1px solid #ddd;border-radius:25px;}
+        button{background:#ffd700;color:#1a1a2e;padding:14px;border:none;border-radius:30px;width:100%;font-weight:bold;cursor:pointer;}
+        .error{color:#f44336;margin-top:10px;display:none;}
+    </style>
+</head>
+<body>
+<div class="box">
+    <h2>🔐 لوحة الإدارة</h2>
+    <input type="password" id="password" placeholder="كلمة السر">
+    <button onclick="login()">دخول</button>
+    <div id="error" class="error">كلمة السر خطأ</div>
+</div>
+<script>
+    function login(){
+        if(document.getElementById('password').value==='32908782'){
+            localStorage.setItem('admin_logged','true');
+            window.location.href='admin.html';
+        } else {
+            document.getElementById('error').style.display='block';
+        }
+    }
+</script>
+</body>
+</html>
