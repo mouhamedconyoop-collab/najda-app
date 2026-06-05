@@ -1,260 +1,116 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نجدة | خدمات الطوارئ</title>
-
 <style>
-body{
+*{
     margin:0;
-    font-family:system-ui;
-    background: radial-gradient(circle at top,#0f172a,#020617);
-    color:white;
-    overflow-x:hidden;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
 }
 
-/* ===== HERO ===== */
-header{
+body{
+    background:linear-gradient(135deg,#f5f5f5,#e9ecef);
+}
+
+/* HEADER */
+.header{
+    background:linear-gradient(135deg,#1a1a2e,#111827);
+    color:#fff;
+    padding:40px;
     text-align:center;
-    padding:90px 20px;
-    position:relative;
+    animation:fadeDown 0.6s ease;
 }
 
-.glow{
-    position:absolute;
-    width:400px;
-    height:400px;
-    background:#ffd700;
-    filter:blur(120px);
-    opacity:0.15;
-    top:-100px;
-    left:50%;
-    transform:translateX(-50%);
-    animation:float 6s infinite ease-in-out;
-}
-
-@keyframes float{
-    0%,100%{transform:translate(-50%,0);}
-    50%{transform:translate(-50%,30px);}
+@keyframes fadeDown{
+    from{opacity:0; transform:translateY(-20px);}
+    to{opacity:1; transform:translateY(0);}
 }
 
 .logo{
-    font-size:80px;
-    animation:pop 1s ease;
-}
-
-@keyframes pop{
-    from{transform:scale(0);}
-    to{transform:scale(1);}
-}
-
-h1{
-    font-size:48px;
-    margin:10px 0;
-}
-
-p{
-    color:#cbd5e1;
-    max-width:600px;
-    margin:auto;
-    line-height:1.8;
-}
-
-/* ===== BUTTONS ===== */
-.btns{
-    margin-top:30px;
-}
-
-.btn{
-    display:inline-block;
-    padding:14px 28px;
-    margin:10px;
-    border-radius:50px;
-    text-decoration:none;
+    font-size:52px;
     font-weight:bold;
-    transition:0.3s;
 }
 
-.primary{
-    background:linear-gradient(45deg,#ffd700,#ffb700);
-    color:black;
-    box-shadow:0 0 20px rgba(255,215,0,0.4);
+.logo span{
+    color:#ffd700;
 }
 
-.primary:hover{
-    transform:scale(1.05);
-}
-
-.outline{
-    border:2px solid white;
-    color:white;
-}
-
-.outline:hover{
-    background:white;
-    color:black;
-}
-
-/* ===== STATS ===== */
-.stats{
-    display:flex;
-    justify-content:center;
-    gap:15px;
-    flex-wrap:wrap;
-    margin-top:40px;
-}
-
-.stat{
-    background:rgba(255,255,255,0.05);
-    padding:15px 25px;
-    border-radius:15px;
-    backdrop-filter:blur(10px);
-}
-
-/* ===== CARDS ===== */
-.section{
-    padding:60px 20px;
-    text-align:center;
+/* CARDS */
+.container{
+    max-width:1100px;
+    margin:40px auto;
+    padding:0 20px;
 }
 
 .cards{
     display:flex;
     flex-wrap:wrap;
+    gap:25px;
     justify-content:center;
-    gap:20px;
 }
 
 .card{
+    background:#fff;
+    border-radius:25px;
+    padding:35px;
+    text-align:center;
     width:280px;
-    background:rgba(255,255,255,0.05);
-    backdrop-filter:blur(12px);
-    padding:25px;
-    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
     transition:0.3s;
-    border:1px solid rgba(255,255,255,0.1);
+    cursor:pointer;
+    animation:fadeUp 0.6s ease;
+}
+
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
 }
 
 .card:hover{
     transform:translateY(-10px) scale(1.03);
-    border-color:#ffd700;
 }
 
 .icon{
-    font-size:50px;
+    font-size:65px;
+    margin-bottom:15px;
 }
 
-.card a{
-    display:inline-block;
-    margin-top:10px;
-    padding:10px 20px;
-    border-radius:30px;
+/* BUTTON */
+.btn{
     background:#ffd700;
-    color:black;
-    text-decoration:none;
-}
-
-/* ===== AI BOX ===== */
-.ai{
-    margin:70px auto;
-    max-width:800px;
-    padding:40px;
-    background:rgba(255,255,255,0.05);
-    border-radius:25px;
-    backdrop-filter:blur(15px);
-    text-align:center;
-    border:1px solid rgba(255,255,255,0.1);
-}
-
-.ai a{
-    display:inline-block;
-    margin-top:20px;
-    padding:15px 30px;
-    background:linear-gradient(45deg,#0f172a,#1e293b);
-    color:white;
+    color:#1a1a2e;
+    padding:10px 25px;
     border-radius:40px;
     text-decoration:none;
-    box-shadow:0 0 25px rgba(255,215,0,0.2);
+    font-weight:bold;
+    display:inline-block;
+    transition:0.3s;
 }
 
-/* ===== FOOTER ===== */
-footer{
+.btn:hover{
+    transform:scale(1.05);
+    background:#e6c200;
+}
+
+/* FOOTER */
+.footer{
+    background:#1a1a2e;
+    color:#888;
     text-align:center;
     padding:30px;
-    opacity:0.8;
+    margin-top:50px;
 }
 
-/* ===== ANIMATION ON SCROLL ===== */
-.card, .ai{
-    animation:fade 1s ease;
+.footer a{
+    color:#ffd700;
+    margin:0 10px;
+    text-decoration:none;
 }
 
-@keyframes fade{
-    from{opacity:0; transform:translateY(30px);}
-    to{opacity:1; transform:translateY(0);}
+.footer a:hover{
+    text-decoration:underline;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+    .card{width:100%;}
 }
 </style>
-</head>
-
-<body>
-
-<div class="glow"></div>
-
-<header>
-    <div class="logo">🜸</div>
-    <h1>نجدة</h1>
-    <p>منصة ذكية لطلب خدمات الطوارئ بسرعة عالية مع نظام فنيين وإدارة متكامل.</p>
-
-    <div class="btns">
-        <a href="chat_user.html" class="btn primary">🤖 ابدأ المحادثة</a>
-        <a href="#services" class="btn outline">الخدمات</a>
-    </div>
-
-    <div class="stats">
-        <div class="stat">⚡ سريع</div>
-        <div class="stat">👨‍🔧 فنيين جاهزين</div>
-        <div class="stat">📍 قريب منك</div>
-    </div>
-</header>
-
-<section class="section" id="services">
-<h2>الخدمات</h2>
-
-<div class="cards">
-
-<div class="card">
-<div class="icon">⚡</div>
-<h3>كهرباء</h3>
-<p>إصلاح الأعطال والتركيب</p>
-<a href="order.html?service=كهرباء">طلب</a>
-</div>
-
-<div class="card">
-<div class="icon">🚰</div>
-<h3>سباكة</h3>
-<p>تسربات وصيانة</p>
-<a href="order.html?service=سباكة">طلب</a>
-</div>
-
-<div class="card">
-<div class="icon">🚗</div>
-<h3>سيارات</h3>
-<p>سحب + بطارية + إطار</p>
-<a href="order.html?service=سيارات">طلب</a>
-</div>
-
-</div>
-</section>
-
-<div class="ai">
-<h2>🤖 مساعد نجدة</h2>
-<p>يساعدك في اختيار الخدمة المناسبة خلال ثواني</p>
-<a href="chat_user.html">فتح المحادثة</a>
-</div>
-
-<footer>
-© نجدة - نظام طوارئ ذكي
-</footer>
-
-</body>
-</html>
