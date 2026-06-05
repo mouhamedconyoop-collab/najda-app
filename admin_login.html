@@ -22,12 +22,12 @@
     <div id="error" class="error">كلمة السر خطأ</div>
 </div>
 <script>
-    function login() {
-        if(document.getElementById('password').value === '32908782') {
-            localStorage.setItem('admin_logged', 'true');
-            window.location.href = 'admin.html';
+    function login(){
+        if(document.getElementById('password').value==='32908782'){
+            localStorage.setItem('admin_logged','true');
+            window.location.href='admin.html';
         } else {
-            document.getElementById('error').style.display = 'block';
+            document.getElementById('error').style.display='block';
         }
     }
 </script>
