@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -7,24 +6,26 @@
     <title>لوحة الفني - نجدة</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;}
-        body{background:#0a0a0a;font-family:'Segoe UI',sans-serif;padding:20px;}
+        body{background:#f0f2f5;font-family:'Segoe UI',sans-serif;padding:20px;}
         .container{max-width:700px;margin:auto;}
-        .profile{background:#111;border-radius:30px;padding:30px;text-align:center;margin-bottom:25px;border:1px solid #333;}
-        .profile-img{width:100px;height:100px;margin:0 auto 15px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;border:3px solid #ffd700;}
+        .profile{background:#fff;border-radius:30px;padding:30px;text-align:center;margin-bottom:25px;box-shadow:0 2px 10px rgba(0,0,0,0.05);}
+        .profile-img{width:100px;height:100px;margin:0 auto 15px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;border:3px solid #ffd700;}
         .profile-img img{width:100%;height:100%;object-fit:cover;}
         .profile-img span{font-size:50px;}
-        .profile-name{font-size:24px;color:#ffd700;font-weight:bold;}
-        .specialty{background:#ffd700;color:#000;padding:5px 15px;border-radius:30px;display:inline-block;margin-top:10px;}
+        .profile-name{font-size:24px;color:#1a1a2e;font-weight:bold;}
+        .specialty{background:#ffd700;color:#1a1a2e;padding:5px 15px;border-radius:30px;display:inline-block;margin-top:10px;}
         .btn-outline{background:#1a1a2e;color:#fff;padding:12px;border:none;border-radius:30px;width:100%;font-weight:bold;margin-top:12px;cursor:pointer;}
-        .card{background:#111;border-radius:25px;padding:20px;margin-bottom:15px;border:1px solid #333;}
+        .card{background:#fff;border-radius:25px;padding:20px;margin-bottom:15px;box-shadow:0 2px 10px rgba(0,0,0,0.05);}
         .current{border-right:5px solid #ffd700;}
-        .btn{background:#ffd700;color:#000;padding:12px;border:none;border-radius:30px;width:100%;font-weight:bold;margin-top:8px;cursor:pointer;}
+        .btn{background:#ffd700;color:#1a1a2e;padding:12px;border:none;border-radius:30px;width:100%;font-weight:bold;margin-top:8px;cursor:pointer;}
         .btn-chat{background:#2196f3;color:#fff;}
         .empty{text-align:center;padding:30px;color:#888;}
-        .section-title{font-size:18px;color:#ffd700;margin:20px 0 10px;font-weight:bold;}
+        .section-title{font-size:18px;color:#1a1a2e;margin:20px 0 10px;font-weight:bold;}
         .flex-buttons{display:flex;gap:10px;margin-top:12px;}
         .flex-buttons .btn{flex:1;margin-top:0;}
         #fileInput{display:none;}
+        .order-address{color:#333;margin-bottom:8px;}
+        .order-client{color:#666;}
     </style>
 </head>
 <body>
@@ -66,9 +67,9 @@
         const currentDiv = document.getElementById('currentOrders');
         const completedDiv = document.getElementById('completedOrders');
         if(current.length === 0){currentDiv.innerHTML = '<div class="empty">لا توجد طلبات حالية</div>';}
-        else{currentDiv.innerHTML = '';current.forEach(order => {currentDiv.innerHTML += `<div class="card current"><p><strong>📍 ${order.address}</strong></p><p>👤 ${order.name} | 📱 ${order.phone}</p><div class="flex-buttons"><button class="btn" onclick="completeOrder(${order.id})">✅ تم الإنجاز</button><button class="btn btn-chat" onclick="openChat(${order.id})">💬 دردشة</button></div></div>`;});}
+        else{currentDiv.innerHTML = '';current.forEach(order => {currentDiv.innerHTML += `<div class="card current"><div class="order-address"><strong>📍 ${order.address}</strong></div><div class="order-client">👤 ${order.name} | 📱 ${order.phone}</div><div class="flex-buttons"><button class="btn" onclick="completeOrder(${order.id})">✅ تم الإنجاز</button><button class="btn btn-chat" onclick="openChat(${order.id})">💬 دردشة</button></div></div>`;});}
         if(completed.length === 0){completedDiv.innerHTML = '<div class="empty">لا توجد طلبات منجزة</div>';}
-        else{completedDiv.innerHTML = '';completed.forEach(order => {completedDiv.innerHTML += `<div class="card"><p>${order.address.substring(0,50)}</p><p style="color:#4caf50;">✓ تم الإنجاز</p></div>`;});}
+        else{completedDiv.innerHTML = '';completed.forEach(order => {completedDiv.innerHTML += `<div class="card"><div class="order-address">${order.address.substring(0,50)}</div><p style="color:#4caf50;">✓ تم الإنجاز</p></div>`;});}
     }
     function completeOrder(orderId){
         let orders = JSON.parse(localStorage.getItem('orders') || '[]');
@@ -78,7 +79,7 @@
     }
     function openChat(orderId){
         localStorage.setItem('currentChatOrder', orderId);
-        window.open('chat.html', '_blank', 'width=400,height=600');
+        window.open('chat.html', '_blank', 'width=400,height=550');
     }
     function updateImage(){
         const file = document.getElementById('fileInput').files[0];
@@ -95,7 +96,7 @@
         }
     }
     function logout(){
-        localStorage.removeItem('currentTech');
+        // لا نمسح الصورة، فقط نخرج
         window.location.href = 'tech_login.html';
     }
     loadOrders();
