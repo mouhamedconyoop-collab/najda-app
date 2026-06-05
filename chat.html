@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المحادثة - نجدة</title>
+
+<style>
+body{margin:0;font-family:system-ui;background:#e5ddd5;display:flex;flex-direction:column;height:100vh;}
+header{background:#075e54;color:#fff;padding:15px;text-align:center;}
+#msgs{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:10px;}
+.msg{padding:10px;border-radius:10px;max-width:70%;}
+.me{background:#ffd700;align-self:flex-start;}
+.other{background:#fff;align-self:flex-end;}
+footer{display:flex;padding:10px;gap:10px;background:#f0f0f0;}
+input{flex:1;padding:10px;border-radius:20px;border:none;}
+button{padding:10px 15px;border:none;border-radius:20px;background:#075e54;color:#fff;}
+</style>
+</head>
+
+<body>
+
+<header>💬 محادثة نجدة</header>
+
+<div id="msgs"></div>
+
+<footer>
+<input id="msgInput" placeholder="اكتب رسالة...">
+<button onclick="send()">إرسال</button>
+</footer>
+
+<script>
+const orderId = new URLSearchParams(location.search).get("orderId");
+const role = localStorage.getItem("role") || "client";
+
+function getChats(){
+    return JSON.parse(localStorage.getItem("chats") || "[]");
+}
+
+function saveChats(c){
+    localStorage.setItem("chats", JSON.stringify(c));
+}
+
+function send(){
+    let input = document.getElementById("msgInput");
+    if(!input.value) return;
+
+    let chats = getChats();
+
+    chats.push({
+        orderId: orderId,
+        sender: role,
+        message: input.value,
+        time: Date.now()
+    });
+
+    saveChats(chats);
+    input.value="";
+    load();
+}
+
+function load(){
+    let box = document.getElementById("msgs");
+    box.innerHTML="";
+
+    let chats = getChats().filter(c=>c.orderId==orderId);
+
+    chats.forEach(m=>{
+        let div=document.createElement("div");
+        div.className="msg "+(m.sender==role?"me":"other");
+        div.innerText=m.sender+": "+m.message;
+        box.appendChild(div);
+    });
+
+    box.scrollTop=box.scrollHeight;
+}
+
+load();
+setInterval(load,2000);
+</script>
+
+</body>
+</html>
