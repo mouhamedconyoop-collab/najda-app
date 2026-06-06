@@ -1,60 +1,136 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نجدة | الرئيسية</title>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{background:#f0f2f5;font-family:'Segoe UI',sans-serif;}
-        .header{background:#1a1a2e;color:#fff;padding:30px;text-align:center;}
-        .logo{font-size:48px;font-weight:bold;}
-        .logo span{color:#ffd700;}
-        .container{max-width:1100px;margin:40px auto;padding:0 20px;}
-        .cards{display:flex;flex-wrap:wrap;gap:25px;justify-content:center;}
-        .card{background:#fff;border-radius:25px;padding:35px;text-align:center;width:280px;box-shadow:0 5px 20px rgba(0,0,0,0.08);transition:0.3s;cursor:pointer;}
-        .card:hover{transform:translateY(-8px);}
-        .icon{font-size:65px;margin-bottom:15px;}
-        .card h2{color:#1a1a2e;margin-bottom:10px;}
-        .card p{color:#666;font-size:14px;margin-bottom:20px;}
-        .btn{background:#ffd700;color:#1a1a2e;padding:10px 25px;border-radius:40px;text-decoration:none;font-weight:bold;display:inline-block;}
-        .footer{background:#1a1a2e;color:#888;text-align:center;padding:30px;margin-top:50px;}
-        .footer a{color:#ffd700;margin:0 10px;text-decoration:none;}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>النجدة | الخدمات الطوارئ</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:#0b0b0b;
+color:#fff;
+overflow-x:hidden;
+}
+
+.hero{
+min-height:100vh;
+padding:40px 20px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+background:
+radial-gradient(circle at top,#2a2a2a 0%,#0b0b0b 60%);
+}
+
+.logo{
+font-size:85px;
+margin-bottom:10px;
+animation:float 3s ease-in-out infinite;
+}
+
+.hero h1{
+font-size:48px;
+color:#ffd700;
+margin-bottom:10px;
+}
+
+.hero p{
+font-size:18px;
+color:#cfcfcf;
+line-height:1.8;
+max-width:600px;
+margin-bottom:30px;
+}
+
+.main-btn{
+display:inline-block;
+background:#ffd700;
+color:#000;
+padding:16px 35px;
+border-radius:50px;
+font-size:18px;
+font-weight:bold;
+text-decoration:none;
+transition:.3s;
+}
+
+.main-btn:hover{
+transform:scale(1.05);
+}
+
+.features{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+justify-content:center;
+margin-top:40px;
+}
+
+.feature{
+background:#151515;
+border:1px solid #222;
+padding:12px 18px;
+border-radius:30px;
+font-size:14px;
+}
+
+@keyframes float{
+0%{transform:translateY(0);}
+50%{transform:translateY(-10px);}
+100%{transform:translateY(0);}
+}
+
+@media(max-width:768px){
+
+.hero h1{
+font-size:38px;
+}
+
+.logo{
+font-size:70px;
+}
+
+.hero p{
+font-size:16px;
+}
+}
+</style>
 </head>
+
 <body>
-    <div class="header">
-        <div class="logo">🜸 <span>نجدة</span> 🜸</div>
-        <div>خدمات الطوارئ - كهرباء • سباكة • سيارات</div>
-    </div>
-    <div class="container">
-        <div class="cards">
-            <div class="card" onclick="location.href='order.html?service=كهرباء'">
-                <div class="icon">⚡</div>
-                <h2>كهرباء</h2>
-                <p>أعطال كهربائية • ماس كهربائي • تركيب وصيانة</p>
-                <a href="order.html?service=كهرباء" class="btn">طلب خدمة</a>
-            </div>
-            <div class="card" onclick="location.href='order.html?service=سباكة'">
-                <div class="icon">🚰</div>
-                <h2>سباكة</h2>
-                <p>تسربات المياه • انسدادات • صيانة السخانات</p>
-                <a href="order.html?service=سباكة" class="btn">طلب خدمة</a>
-            </div>
-            <div class="card" onclick="location.href='order.html?service=سيارات'">
-                <div class="icon">🚗</div>
-                <h2>سيارات</h2>
-                <p>بطارية • نفاد الوقود • تبديل إطار • سحب المركبة</p>
-                <a href="order.html?service=سيارات" class="btn">طلب خدمة</a>
-            </div>
-        </div>
-    </div>
-    <div class="footer">
-        <a href="apply.html">👨‍🔧 انضم كفني</a>
-        <a href="tech_login.html">🔧 دخول الفنيين</a>
-        <a href="admin_login.html">👑 الإدارة</a>
-        <a href="about.html">📖 من نحن</a>
-        <a href="contact.html">📞 اتصل بنا</a>
-    </div>
+
+<section class="hero">
+
+<div class="logo">🜸</div>
+
+<h1>النجدة</h1>
+
+<p>
+خدمات الطوارئ المنزلية والسيارات على مدار الساعة.
+احصل على المساعدة بسرعة من فنيين متخصصين ومعتمدين.
+</p>
+
+<a href="#services" class="main-btn">
+اطلب خدمة الآن
+</a>
+
+<div class="features">
+<div class="feature">⚡ الكهرباء</div>
+<div class="feature">🚰 السباكة</div>
+<div class="feature">🚗 السيارات</div>
+<div class="feature">🕒 الخدمة 24/7</div>
+</div>
+
+</section>
+
 </body>
 </html>
